@@ -1,23 +1,27 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 // Components
-import FeedbackOptions from './components/FeedbackOptions/FeedbackOptions';
+import Feedback from './components/Feedback';
 
-import Statistics from './components/Statistics/Statistics';
+import Draft from './components/Draft'; // для тренировки теории модуля
 
 // Styles
+import './index.css';
+
 import './App.css';
 
-const App = () => {
-  return (
-    <div className="App">
-      {/* 1. рендерим и вставляем часть кода из components/FeedbackOptions/FeedbackOptions.js */}
-      <FeedbackOptions />
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        {/* Home work */}
+        <Feedback />
 
-      {/* 2. рендерим и вставляем часть кода из components//Statistics/Statistics.js */}
-      <Statistics />
-    </div>
-  );
-};
+        {/* для тренировки теории по модулю components//Draft/Draft.js */}
+        <Draft />
+      </div>
+    );
+  }
+}
 
 export default App;
