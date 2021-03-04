@@ -54,10 +54,6 @@ class Feedback extends Component {
   //   return totalFeedback;
   // };
 
-  countPositiveFeedbackPercentage = () => {
-    //
-  };
-
   // render
   render() {
     // для оптимизации кода деструктуризируем свойства state,чтобы каждый раз не писать this.state в Statistics
