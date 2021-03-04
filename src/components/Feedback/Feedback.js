@@ -9,6 +9,9 @@ import Statistics from './Statistics';
 
 import Notification from './Notification';
 
+// Styles
+import s from './Feedback.module.css';
+
 class Feedback extends Component {
   // static defaultProps = {
   //   value: this.defaultProps.value,
@@ -70,9 +73,9 @@ class Feedback extends Component {
     );
 
     return (
-      <div>
+      <div className={s.Feedback}>
         {/*1. title выносим в отдельный component 
-        /* 2.  внутрь Section рендерим и вставляем часть кода из FeedbackOptions/FeedbackOptions.js */}
+        /* 2.  внутрь Section рендерим и вставляем часть кода из ./FeedbackOptions.js */}
         <Section title="Please leave feedback">
           <FeedbackOptions
             options={this.state}
@@ -81,7 +84,7 @@ class Feedback extends Component {
         </Section>
 
         {/*3. title выносим в отдельный component
-        4. внутрь Section рендерим и вставляем часть кода из ./Statistics/Statistics.js */}
+        4. внутрь Section рендерим и вставляем часть кода из ./Statistics.js */}
         <Section title="Statistics">
           {/* рендер по условию: если есть хотя бы 1 отзыв выведи всю статистику, в обратном случае - надпись No feedback given' */}
           {countTotalFeedback !== 0 ? (

@@ -8,8 +8,6 @@ import Feedback from './components/Feedback';
 // Styles
 import './index.css';
 
-import './App.css';
-
 class App extends Component {
   render() {
     return (

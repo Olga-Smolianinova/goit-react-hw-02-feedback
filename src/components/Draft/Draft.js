@@ -8,6 +8,7 @@ import ColorPicker from './ColorPicker';
 
 import TodoList from './TodoList/TodoList';
 import initialTodos from './TodoList/todos.json'; //данные для TodoList
+import s from './TodoList/TodoList.module.css'; //стили для TodoList
 
 // data for ColorPicker
 const colorPickerOptions = [
@@ -55,7 +56,7 @@ class Draft extends Component {
 
         {/* TodoList */}
 
-        <div>
+        <div className={s.TodoList}>
           <h2>TodoList</h2>
           <p>Total todos: {todos.length}</p>
           <p>Количество выполненных: {completedTodosCount}</p>

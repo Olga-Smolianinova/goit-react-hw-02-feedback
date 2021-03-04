@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import s from './Counter.module.css';
+
 class Counter extends Component {
   static defaultProps = {
     initialValue: 0,
@@ -27,7 +29,7 @@ class Counter extends Component {
 
   render() {
     return (
-      <div>
+      <div className={s.Counter}>
         <h2>Modul Training</h2>
         <h2>Counter</h2>
         <button type="button">Counter value {this.state.value}</button>

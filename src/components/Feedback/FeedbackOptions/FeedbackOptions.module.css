@@ -1,0 +1,8 @@
+.Feedback__btn {
+  transition: transform 250ms linear;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.Feedback__btn:hover {
+  transform: scale(1.2);
+}

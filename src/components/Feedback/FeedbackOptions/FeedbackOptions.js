@@ -1,6 +1,6 @@
 import React from 'react';
 
-// import Statistics from './components/Statistics/Statistics';
+import s from './FeedbackOptions.module.css';
 
 const FeedbackOptions = ({ options, onLeaveFeedback }) => {
   // т.к. state - объект, обработаем его с помощью метода Object.keys, и далее ключи выведем с помощью map
@@ -9,7 +9,12 @@ const FeedbackOptions = ({ options, onLeaveFeedback }) => {
   return (
     <>
       {buttons.map(button => (
-        <button type="button" key={button} onClick={onLeaveFeedback}>
+        <button
+          type="button"
+          key={button}
+          onClick={onLeaveFeedback}
+          className={s.Feedback__btn}
+        >
           {/*рендерим button, приведя сначала к  Заглавной букве название кнопки */}
           {button.toUpperCase().slice(0, 1) + button.slice(1)}
         </button>

@@ -20,9 +20,43 @@ h3,
 h4,
 h5,
 h6 {
-  margin-top: 0;
+  margin: 0;
+}
+
+ul {
+  list-style: none;
 }
 
 p {
-  margin-top: 0;
+  margin: 0;
+}
+
+/* Общие стили для Feedback */
+.Feedback {
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+}
+
+.Section {
+  margin: 20px;
+}
+.Title {
+  margin: 15px;
+}
+
+/* Draft ColorPicker */
+.ColorPicker__option {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  margin: 4px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: transform 250ms linear;
+}
+
+.ColorPicker__option--active {
+  transform: scale(1.2);
 }
