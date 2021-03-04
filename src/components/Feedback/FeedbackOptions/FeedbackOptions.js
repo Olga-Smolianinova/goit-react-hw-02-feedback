@@ -7,16 +7,14 @@ const FeedbackOptions = ({ options, onLeaveFeedback }) => {
   const buttons = Object.keys(options);
 
   return (
-    <div>
-      <h2>Please leave feedback</h2>
-
+    <>
       {buttons.map(button => (
         <button type="button" key={button} onClick={onLeaveFeedback}>
           {/*рендерим button, приведя сначала к  Заглавной букве название кнопки */}
           {button.toUpperCase().slice(0, 1) + button.slice(1)}
         </button>
       ))}
-    </div>
+    </>
   );
 };
 
