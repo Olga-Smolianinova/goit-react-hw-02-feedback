@@ -14,7 +14,7 @@ class ColorPicker extends Component {
     this.setState({ activeOptionIdx: index });
   };
 
-  // чтобы активная ссылка подсвечивалась добавляем дополнительный className: ColorPicker__option--active. Добавляем условие, если индекс массива ===  activeOptionIdx появляется доп.класс push к другому классу и ссылку на этот метод отражаем в className
+  // чтобы активная ссылка подсвечивалась добавляем дополнительный className: ColorPicker__option--active. Добавляем условие, если индекс массива ===  activeOptionIdx появляется доп.класс push к другому классу и ссылку на этот метод отражаем в className. (Если установить  npm install classnames можно сократить метод. Видео 4 С.Репета 00:55:00)
   makeOptionClassName = index => {
     const optionClasses = ['ColorPicker__option'];
 
