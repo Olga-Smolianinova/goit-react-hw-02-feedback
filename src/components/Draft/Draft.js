@@ -11,12 +11,16 @@ import ColorPicker from './ColorPicker';
 
 import TodoList from './TodoList/TodoList';
 import TodoForm from './TodoForm/TodoForm';
+import TodoFilter from './TodoFilter/TodoFilter';
 
-import initialTodos from './TodoList/todos.json'; //данные для TodoList
+// import initialTodos from './TodoList/todos.json'; //данные для TodoList
 import './TodoList/TodoList.css'; //стили для TodoList
 
-import Form from './Form/Form';
-import TodoFilter from './TodoFilter/TodoFilter';
+// для тренировки Form
+// import Form from './Form/Form';
+
+// LOCAL STORAGE И ЖИЗНЕННЫЕ ЦИКЛЫ
+import Modal from './Modal/Modal'; //Modal window
 
 // data for ColorPicker
 const colorPickerOptions = [
@@ -31,10 +35,15 @@ const colorPickerOptions = [
 class Draft extends Component {
   // state for TodoList
   state = {
-    todos: initialTodos,
+    // todos: initialTodos,
+
+    todos: [],
 
     // для фильтрации
     filter: '',
+
+    // для Модального окна
+    showModal: false,
   };
 
   // во время submit TodoForm нужно получить из нее данные, чтобы добавить  еще одну todos с ее текстом. Передаем этом метод с помощью prop для TodoForm
@@ -108,6 +117,43 @@ class Draft extends Component {
     }));
   };
 
+  // LOCAL STORAGE И ЖИЗНЕННЫЕ ЦИКЛЫ
+  // методы жизненного цикла вызываются без помощи стрелоных функции
+
+  // вызывается после каждого обновления компонента
+  componentDidUpdate(prevProps, prevState) {
+    //обязательно сравниваем предыдущее значение todos c текущим, если неравно, то обновляем все todos. Это делается, чтобы не зациклить компонент
+    if (this.state.todos !== prevState.todos) {
+      // console.log('Update todos');
+
+      // при каждом обновлении todos массив todos, приводим к строке и полностью перезаписываем todos  в local Storage
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+    }
+  }
+
+  // вызывается один раз при Mount компонета. Удобен, чтобы взять начальные данные, которые хранятся в localStorage
+  componentDidMount() {
+    // console.log('Mount component');
+
+    const todos = localStorage.getItem('todos');
+    // console.log(todos);
+
+    const parsedTodos = JSON.parse(todos);
+    // console.log(parsedTodos);
+
+    //сохраняем в localStorage новые todos поверх предыдущих и проверка на null. если есть todos, т.е. массив не пустой, то пишем их в  localStorage
+    if (parsedTodos) {
+      this.setState({ todos: parsedTodos });
+    }
+  }
+
+  // работа Модального окна. Открытие-закрытие в зависимости от предыдущего значения
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
   render() {
     // деструктуризируем todos
     const { todos } = this.state;
@@ -149,7 +195,23 @@ class Draft extends Component {
         />
 
         {/* Form. чтобы при отравке (submit) формы получить доступ к state из Form.js добавляем prop onSubmit методом для этого */}
-        <Form onSubmit={this.formSubmitHandler} />
+        {/* <Form onSubmit={this.formSubmitHandler} /> */}
+
+        {/* LOCAL STORAGE И ЖИЗНЕННЫЕ ЦИКЛЫ */}
+        {/* Modal. Рендер по условию */}
+        <button type="button" onClick={this.toggleModal}>
+          Open modal window
+        </button>
+
+        {this.state.showModal && (
+          //в props прокидываем toggleModal для возможности закрыть модалку по нажатию на "Escape"
+          <Modal onClose={this.toggleModal}>
+            <h1>Modal</h1>
+            <button type="button" onClick={this.toggleModal}>
+              Close Modal window
+            </button>
+          </Modal>
+        )}
       </div>
     );
   }
