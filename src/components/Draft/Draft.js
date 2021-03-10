@@ -13,7 +13,7 @@ import TodoList from './TodoList/TodoList';
 import TodoForm from './TodoForm/TodoForm';
 import TodoFilter from './TodoFilter/TodoFilter';
 
-// import initialTodos from './TodoList/todos.json'; //данные для TodoList
+import initialTodos from './TodoList/todos.json'; //данные для TodoList
 import './TodoList/TodoList.css'; //стили для TodoList
 
 // для тренировки Form
@@ -35,9 +35,9 @@ const colorPickerOptions = [
 class Draft extends Component {
   // state for TodoList
   state = {
-    // todos: initialTodos,
+    todos: initialTodos,
 
-    todos: [],
+    // todos: [],
 
     // для фильтрации
     filter: '',

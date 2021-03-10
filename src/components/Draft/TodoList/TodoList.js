@@ -2,7 +2,11 @@ import React from 'react';
 
 import classNames from 'classnames'; //подключаем npm i classnames для удобства и  возможности объединения несколькиз class в одном свойстве
 
-import './TodoList.css';
+import IconButton from '../IconButton';
+
+import { ReactComponent as DeleteIcon } from '../../../icons/delete.svg'; //import иконки для удаления
+
+import './TodoList.css'; //import компонента кнопки
 
 const TodoList = ({ todos, onDeleteTodo, onToggleCompleted }) => {
   return (
@@ -24,6 +28,18 @@ const TodoList = ({ todos, onDeleteTodo, onToggleCompleted }) => {
           />
 
           <p className="TodoList__text">{text}</p>
+
+          {/* Вставка IconButton. // когда в кнопке отстутствует текст (в случае когда там иконка) необходимо передавать атрибут доступности aria-label и в самом компоненте IconButton распыляем props {...allProps} */}
+          <IconButton
+            onClick={() => {
+              onDeleteTodo(id);
+            }}
+            aria-label="Delete"
+          >
+            {/* Вставка иконки для удаления delete.svg */}
+            <DeleteIcon width="25" height="25" fill="#fff" />
+          </IconButton>
+
           <button
             type="button"
             className="TodoList__btn"
