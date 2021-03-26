@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import shortId from 'shortid'; //npm для создания уникальных ID
 
 // Components
-// import Counter from './Counter';
+import Counter from './Counter';
 
-// import Dropdown from './Dropdown';
+import Dropdown from './Dropdown';
 
 import ColorPicker from './ColorPicker';
 
@@ -169,10 +169,10 @@ class Draft extends Component {
     return (
       <div>
         {/* Counter */}
-        {/* <Counter /> */}
+        <Counter />
 
         {/* Dropdown Menu */}
-        {/* <Dropdown /> */}
+        <Dropdown />
 
         {/* ColorPicker */}
         <ColorPicker options={colorPickerOptions} />

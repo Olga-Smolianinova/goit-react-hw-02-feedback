@@ -11,6 +11,7 @@ class Counter extends Component {
 
   // }
 
+  // state, handleIncrement, handleDecrement комментрируем, т.к. они находятся в папке components/redux/counter
   state = {
     value: this.props.initialValue,
   };
