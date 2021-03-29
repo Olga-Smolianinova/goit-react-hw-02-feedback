@@ -39,7 +39,7 @@ class Draft extends Component {
 
     // todos: [],
 
-    // для фильтрации
+    // для фильтрации todos
     filter: '',
 
     // для Модального окна
