@@ -2,7 +2,10 @@ import { createStore, combineReducers } from 'redux';
 
 import { composeWithDevTools } from 'redux-devtools-extension'; //для подлючения Redux devtools и настройки стека прослоек
 
-import counterReducer from '../redux/counter/counter-reducer'; //reducer для Counter
+// Reducers
+import counterReducer from './counter/counter-reducer'; //reducer для Counter
+
+import todosReducer from './todos/todos-reducer'; // reducer для todos в TodoList
 
 // Создание редюсер-болванки
 // const reducer = (state = {}, action) => state;
@@ -55,6 +58,7 @@ import counterReducer from '../redux/counter/counter-reducer'; //reducer для 
 //  В корневой редюсер вызываем combineReducers - полезная функция Redux - возможность делать композицию редьюсеров, то есть совмещать много в один. Это позволяет удобно поддерживать гораздо более сложные состояния в больших приложениях. И в свойстве counter находится редьюсер, который отвечает за него
 const rootReducer = combineReducers({
   counter: counterReducer,
+  todos: todosReducer,
 });
 
 // Для того чтобы создать хранилище, используется функция createStore, которая принимает набор параметров и возвращает созданное хранилище. composeWithDevTools - //для подлючения Redux devtools и настройки стека прослоек

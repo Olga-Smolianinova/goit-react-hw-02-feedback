@@ -1,5 +1,4 @@
-// чтобы при дублировании type  избежать опечатки и ошибки создаем counter-types удобства и избежания ошибок и подключаем их в этом файле в counter-actions.js
-import actionTypes from '../counter/counter-types';
+import actionTypes from './counter-types'; // чтобы при дублировании type  избежать опечатки и ошибки создаем counter-types удобства и избежания ошибок и подключаем их в этом файле в counter-actions.js
 
 // ActionCreater (Фабрики действий) для Counter. Увеличение +1/Уменьшение -1 счетчика
 export const increment = value => ({

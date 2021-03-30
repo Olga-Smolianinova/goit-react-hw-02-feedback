@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+import { connect } from 'react-redux';
+
+import todosActions from '../../redux/todos/todos-actions';
+
 import './TodoForm.css';
 
 class TodoForm extends Component {
@@ -38,4 +42,9 @@ class TodoForm extends Component {
     );
   }
 }
-export default TodoForm;
+
+const mapDispatchToProps = dispatch => ({
+  onSubmit: text => dispatch(todosActions.addTodo(text)),
+});
+
+export default connect(null, mapDispatchToProps)(TodoForm);
