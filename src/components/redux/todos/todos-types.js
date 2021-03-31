@@ -1,3 +1,5 @@
+//В toolkit этот файл todos-types.js не используется, и его можно удалять
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   ADD: 'todos/add',

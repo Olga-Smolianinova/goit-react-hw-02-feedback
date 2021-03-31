@@ -1,67 +1,73 @@
-import { createStore, combineReducers } from 'redux';
+// import { combineReducers } from 'redux'; //для композиции редьюсеров, то есть совмещать много в один
 
-import { composeWithDevTools } from 'redux-devtools-extension'; //для подлючения Redux devtools и настройки стека прослоек
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'; // configureStore - createStore для toolkit; getDefaultMiddleware - список default Middlewares (прослоек). К этому списку еще добавляем logger - прослойка (middleware), которая при console.log() отображает action (до и после).
+
+import logger from 'redux-logger'; // прослойка (middleware) при console.log() отображает action (до и после)
+
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist'; //позволяет записывать какие-либо данные куда-либо, например в local storage. persistStore - для всего store; persistReducer - для одного редьюсера. Все остальное - для проработки ошибок в консоли
+import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web. Это ссылка на local storage для браузера
+
+// import { composeWithDevTools } from 'redux-devtools-extension'; //для подлючения Redux devtools и настройки стека прослоек
 
 // Reducers
 import counterReducer from './counter/counter-reducer'; //reducer для Counter
 
 import todosReducer from './todos/todos-reducer'; // reducer для todos в TodoList
 
-// Создание редюсер-болванки
-// const reducer = (state = {}, action) => state;
-// const store = createStore(reducer);
+// Для каждого объекта в глобальном state свой отдельный Reducer. И внизу этого файла есть корневой редьюсер (rootReducer), где ключ - это название компонента со state для него, а значение - редьюсер, который отвечает за него.
 
-// Для каждого объекта в глобальном state свой отдельный Reducer. И внизу этого файла есть корневой редьюсер (rootReducer), где ключ - это название компонента со state для него, а значение - редьюсер, который отвечает за него
+//redux-logger - прослойка (middleware) при console.log() отображает action (до и после). Чтобы ее добавить - устанавливаем и import logger
+// getDefaultMiddleware - список default Middlewares (прослоек)
 
-// ДО counterReducer для 2-х actions: increment/decrement счетчика. Reducer различает их по свойству type. В параметрах деструктуризируем action. До - (state = initialState, action). После - ...
-// const counterReducer = (state = counterInitialState, { type, payload }) => {
-//   switch (type) {
-//     // Условия reducer, при совпадении type, выполнять указанный код
-//     case 'counter/Increment':
-//       //   на базе предыдущего state вернуть следующий state.
-//       return {
-//         // т.к. разделили общий state на отдельные кусочки, вынесли отдельно counterInitialState, распыляем весь state, чтобы сохранить step и указываем значение value
-//         ...state,
-//         value: state.value + payload,
+// создаем новый стек прослоек, который вернет список default Middlewares (прослоек), к которому добавляем еще logger =  прослойка (middleware) при console.log() отображает action (до и после) и добавляем его в reducer
+const middleware = [
+  ...getDefaultMiddleware({
+    // объект настроек для проработки ошибок в консоли при проверке целостности state, т.е. указываем что нужно игнорировать, чтобы консоль не светилась красными предупреждениями
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }),
+  logger,
+];
 
-//         // если есть дополнительные сложенности в объекте. Берем весь state, распыляем предыдущее состояние, а в counter - распыляем предыдущий state.counter (для того чтобы получить данные других ключей, например step), а его свойство value запиши: state.counter.value + payload
-//         // ...state,
-//         // counter: {
-//         //   ...state.counter,
-//         //   value: state.counter.value + payload,
-//         // },
-//         // если нет дополнительных вложенностей в объекте
-//         // counterValue: state.counterValue + payload,
-//       };
+// redux-persist после установки этого npm- позволяет записывать какие-либо данные куда-либо, например в local storage.  При создании store вешается redux-persist.
+// Берем ссылку на local storage, которая заимпортирована вверху
+// Создаем конфигурацию persist
+const todosPersistConfig = {
+  key: 'todos', // key - ключ, как будет записано в local storage
+  storage, //ссылкa на local storage, которая заимпортирована вверху
+  blacklist: ['filter'], // можно добавлять blacklist||whitelist, в которых указывать, что исключить||что включить в local storage
+};
 
-//     case 'counter/Decrement':
-//       return {
-//         // 1
-//         ...state,
-//         value: state.value - payload,
+//createStore для toolkit -configureStore. DevTools у него уже под капотом. npm redux-devtools-extension можно удалять
+const store = configureStore({
+  // параметры configureStore из документации (reducer, devTools,  middleware и есть еще другие опции)
 
-//         // 2
-//         // ...state,
-//         // counter: {
-//         //   ...state.counter,
-//         //   value: state.counter.value - payload,
-//         // },
-//         // counterValue: state.counterValue - payload,
-//       };
+  // reducer: {}, под капотом уже использует combineReducers  from 'redux' для композиции редьюсеров, то есть совмещать много в один.
+  reducer: {
+    counter: counterReducer,
 
-//     //   нужно default поведение reducer, если case ниодин не совпал
-//     default:
-//       return state;
-//   }
-// };
+    // тот reducer, который нужен для persist сперва оборачиваем в persistReducer.
+    todos: persistReducer(todosPersistConfig, todosReducer),
+  }, //Значение - вызов rootReducer c  persistedReducer, для того чтобы записывать какие-либо данные куда-либо, например в local storage
+  middleware, //возвращает список default Middlewares (прослоек), к которому добавляем еще logger =  прослойка (middleware) при console.log() отображает action (до и после)
 
-//  В корневой редюсер вызываем combineReducers - полезная функция Redux - возможность делать композицию редьюсеров, то есть совмещать много в один. Это позволяет удобно поддерживать гораздо более сложные состояния в больших приложениях. И в свойстве counter находится редьюсер, который отвечает за него
-const rootReducer = combineReducers({
-  counter: counterReducer,
-  todos: todosReducer,
+  devTools: process.env.NODE_ENV === 'development', // чтобы DevTools были доступны только в разработке. Переменная окружения из node - process.env. NODE_ENV - описывает какой сейчас режим разработки: production || development
 });
 
-// Для того чтобы создать хранилище, используется функция createStore, которая принимает набор параметров и возвращает созданное хранилище. composeWithDevTools - //для подлючения Redux devtools и настройки стека прослоек
-const store = createStore(rootReducer, composeWithDevTools());
+//Создаем  persistor - обертка над store, которая при изменении store будет записывать в local storage и обновлять его.
+const persistor = persistStore(store);
 
-export default store;
+// И export persistor  и store
+
+// eslint-disable-next-line import/no-anonymous-default-export
+export default { store, persistor };

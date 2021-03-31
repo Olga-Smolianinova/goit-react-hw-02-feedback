@@ -19,11 +19,17 @@ class TodoForm extends Component {
     event.preventDefault();
     // console.log(this.state);
 
-    // вызов addTodo из Draft.js <Form onSubmit={this.formSubmitHandler};
-    this.props.onSubmit(this.state.message);
+    // проверка на пустую строку. Код выполнится в случае сли пользователь не отправляет пустую строку
+    if (this.state.message !== '') {
+      // вызов addTodo из Draft.js <Form onSubmit={this.formSubmitHandler};
+      this.props.onSubmit(this.state.message);
 
-    // reset для очищения textarea
-    this.setState({ message: '' });
+      // reset для очищения textarea
+      this.setState({ message: '' });
+
+      return;
+    }
+    alert('Нужно ввести текст заметки!');
   };
 
   render() {
