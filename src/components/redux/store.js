@@ -45,6 +45,7 @@ const store = configureStore({
   reducer: {
     counter: counterReducer,
 
+    // тот reducer, который нужен для persist сперва оборачиваем в persistReducer.
     todos: todosReducer,
   }, //Значение - вызов rootReducer c  persistedReducer, для того чтобы записывать какие-либо данные куда-либо, например в local storage
   middleware, //возвращает список default Middlewares (прослоек), к которому добавляем еще logger =  прослойка (middleware) при console.log() отображает action (до и после)
@@ -59,6 +60,3 @@ const persistor = persistStore(store);
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default { store, persistor };
-
-// больше не нужно сохранять todos local storage, т.к. будем работать с backand
-//redux-persist не удаляем, т.к. он понадобится для для хранения данных залогиненного пользователя. До этогоо использовали этот пакет для хранения данных в local storage. persistReducer удаляем и его конфигурацию
