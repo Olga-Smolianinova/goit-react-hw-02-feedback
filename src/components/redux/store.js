@@ -6,7 +6,6 @@ import logger from 'redux-logger'; // прослойка (middleware) при con
 
 import {
   persistStore,
-  persistReducer,
   FLUSH,
   REHYDRATE,
   PAUSE,
@@ -14,7 +13,6 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist'; //позволяет записывать какие-либо данные куда-либо, например в local storage. persistStore - для всего store; persistReducer - для одного редьюсера. Все остальное - для проработки ошибок в консоли
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web. Это ссылка на local storage для браузера
 
 // import { composeWithDevTools } from 'redux-devtools-extension'; //для подлючения Redux devtools и настройки стека прослоек
 
@@ -39,15 +37,6 @@ const middleware = [
   logger,
 ];
 
-// redux-persist после установки этого npm- позволяет записывать какие-либо данные куда-либо, например в local storage.  При создании store вешается redux-persist.
-// Берем ссылку на local storage, которая заимпортирована вверху
-// Создаем конфигурацию persist
-const todosPersistConfig = {
-  key: 'todos', // key - ключ, как будет записано в local storage
-  storage, //ссылкa на local storage, которая заимпортирована вверху
-  blacklist: ['filter'], // можно добавлять blacklist||whitelist, в которых указывать, что исключить||что включить в local storage
-};
-
 //createStore для toolkit -configureStore. DevTools у него уже под капотом. npm redux-devtools-extension можно удалять
 const store = configureStore({
   // параметры configureStore из документации (reducer, devTools,  middleware и есть еще другие опции)
@@ -56,8 +45,7 @@ const store = configureStore({
   reducer: {
     counter: counterReducer,
 
-    // тот reducer, который нужен для persist сперва оборачиваем в persistReducer.
-    todos: persistReducer(todosPersistConfig, todosReducer),
+    todos: todosReducer,
   }, //Значение - вызов rootReducer c  persistedReducer, для того чтобы записывать какие-либо данные куда-либо, например в local storage
   middleware, //возвращает список default Middlewares (прослоек), к которому добавляем еще logger =  прослойка (middleware) при console.log() отображает action (до и после)
 
@@ -71,3 +59,6 @@ const persistor = persistStore(store);
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default { store, persistor };
+
+// больше не нужно сохранять todos local storage, т.к. будем работать с backand
+//redux-persist не удаляем, т.к. он понадобится для для хранения данных залогиненного пользователя. До этогоо использовали этот пакет для хранения данных в local storage. persistReducer удаляем и его конфигурацию
