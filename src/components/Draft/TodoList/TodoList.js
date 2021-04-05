@@ -2,7 +2,7 @@ import React from 'react';
 
 import { connect } from 'react-redux'; //подключение к Redux
 
-import todosActions from '../../redux/todos/todos-actions';
+import todosOperations from '../../redux/todos/todos-operations';
 
 import classNames from 'classnames'; //подключаем npm i classnames для удобства и  возможности объединения несколькиз class в одном свойстве
 
@@ -28,7 +28,7 @@ const TodoList = ({ todos, onDeleteTodo, onToggleCompleted }) => {
             type="checkbox"
             className="TodoList__checkbox"
             checked={completed}
-            onChange={() => onToggleCompleted(id)}
+            onChange={() => onToggleCompleted({ id, completed: !completed })}
           />
 
           <p className="TodoList__text">{text}</p>
@@ -88,8 +88,9 @@ const mapStateToProps = ({ todos: { items, filter } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onDeleteTodo: id => dispatch(todosActions.deleteTodo(id)),
-  onToggleCompleted: id => dispatch(todosActions.toggleCompleted(id)),
+  onDeleteTodo: id => dispatch(todosOperations.deleteTodo(id)),
+
+  onToggleCompleted: id => dispatch(todosOperations.toggleCompleted(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList);

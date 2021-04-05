@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 
+import { connect } from 'react-redux';
+
+// Data
+import todosOperations from '../redux/todos/todos-operations';
+
 // Components
 import Counter from './Counter';
 
@@ -12,7 +17,6 @@ import Statictics from './Statistics/Statistics';
 import TodoForm from './TodoForm/TodoForm';
 import TodoFilter from './TodoFilter/TodoFilter';
 
-// import initialTodos from './TodoList/todos.json'; //данные для TodoList
 import './TodoList/TodoList.css'; //стили для TodoList
 
 // для тренировки Form
@@ -38,6 +42,13 @@ class Draft extends Component {
     showModal: false,
   };
 
+  // ЖИЗНЕННЫЕ ЦИКЛЫ
+  componentDidMount() {
+    // при Mount страницы, чтобы из локального бекенда db.json - отрисовывались данные (todos)
+    this.props.fetchTodos();
+  }
+
+  // МЕТОДЫ
   // чтобы при отравке (submit) формы получить доступ к state из Form.js. Это можно сделать через props. В data прокидываются ключи name,tag из state
   formSubmitHandler = data => {
     console.log(data);
@@ -71,6 +82,8 @@ class Draft extends Component {
         {/* Statictics */}
         <Statictics />
 
+        {/* добавляем отображение Loading при открытии страницы*/}
+        {this.props.isLoadingTodos && <h2>Loading...</h2>}
         {/* TodoList подключится к Redux, и возьмет из хранилища то, что ему нужно  */}
         <TodoList />
 
@@ -95,4 +108,13 @@ class Draft extends Component {
     );
   }
 }
-export default Draft;
+
+const mapStateToProps = state => ({
+  isLoadingTodos: state.todos.loading,
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchTodos: () => dispatch(todosOperations.fetchTodos()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Draft);

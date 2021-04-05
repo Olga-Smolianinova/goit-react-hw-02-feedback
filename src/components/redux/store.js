@@ -5,7 +5,7 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'; // conf
 import logger from 'redux-logger'; // прослойка (middleware) при console.log() отображает action (до и после)
 
 import {
-  persistStore,
+  // persistStore,
   FLUSH,
   REHYDRATE,
   PAUSE,
@@ -14,29 +14,26 @@ import {
   REGISTER,
 } from 'redux-persist'; //позволяет записывать какие-либо данные куда-либо, например в local storage. persistStore - для всего store; persistReducer - для одного редьюсера. Все остальное - для проработки ошибок в консоли
 
-// import { composeWithDevTools } from 'redux-devtools-extension'; //для подлючения Redux devtools и настройки стека прослоек
-
 // Reducers
 import counterReducer from './counter/counter-reducer'; //reducer для Counter
 
 import todosReducer from './todos/todos-reducer'; // reducer для todos в TodoList
 
-// Для каждого объекта в глобальном state свой отдельный Reducer. И внизу этого файла есть корневой редьюсер (rootReducer), где ключ - это название компонента со state для него, а значение - редьюсер, который отвечает за него.
+// для того, чтобы работать с http-запросами нужно прописать дополнительную настройку. Он уже есть под капотом функции configureStore в toolkit и находится внутри  default Middlewares. Это thunk -  default способ для работы  с  http-запросами в Redux. http-запросам нужно делать в action,  в reducer - нельзя
 
-//redux-logger - прослойка (middleware) при console.log() отображает action (до и после). Чтобы ее добавить - устанавливаем и import logger
-// getDefaultMiddleware - список default Middlewares (прослоек)
-
-// создаем новый стек прослоек, который вернет список default Middlewares (прослоек), к которому добавляем еще logger =  прослойка (middleware) при console.log() отображает action (до и после) и добавляем его в reducer
+// создаем  массив стека прослоек, который вернет список default Middlewares (прослоек), к которому добавляем еще logger
 const middleware = [
+  // 1) default Middlewares (прослоек)
   ...getDefaultMiddleware({
-    // объект настроек для проработки ошибок в консоли при проверке целостности state, т.е. указываем что нужно игнорировать, чтобы консоль не светилась красными предупреждениями
+    //2) объект настроек для проработки ошибок в консоли при проверке целостности state, т.е. указываем что нужно игнорировать, чтобы консоль не светилась красными предупреждениями
     serializableCheck: {
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     },
   }),
-  logger,
+  logger, // 3) прослойка (middleware) при console.log() отображает action (до и после) и добавляем его в reducer
 ];
 
+// Для каждого объекта в глобальном state свой отдельный Reducer. И внизу этого файла есть корневой редьюсер (rootReducer), где ключ - это название компонента со state для него, а значение - редьюсер, который отвечает за него.
 //createStore для toolkit -configureStore. DevTools у него уже под капотом. npm redux-devtools-extension можно удалять
 const store = configureStore({
   // параметры configureStore из документации (reducer, devTools,  middleware и есть еще другие опции)
@@ -45,7 +42,6 @@ const store = configureStore({
   reducer: {
     counter: counterReducer,
 
-    // тот reducer, который нужен для persist сперва оборачиваем в persistReducer.
     todos: todosReducer,
   }, //Значение - вызов rootReducer c  persistedReducer, для того чтобы записывать какие-либо данные куда-либо, например в local storage
   middleware, //возвращает список default Middlewares (прослоек), к которому добавляем еще logger =  прослойка (middleware) при console.log() отображает action (до и после)
@@ -54,9 +50,12 @@ const store = configureStore({
 });
 
 //Создаем  persistor - обертка над store, которая при изменении store будет записывать в local storage и обновлять его.
-const persistor = persistStore(store);
+// const persistor = persistStore(store);
 
 // И export persistor  и store
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { store, persistor };
+// export default { store, persistor };
+export default store;
+// больше не нужно сохранять todos local storage, т.к. будем работать с backand
+//redux-persist не удаляем, т.к. он понадобится
