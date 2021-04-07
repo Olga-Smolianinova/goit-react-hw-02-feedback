@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // Components
-import Feedback from './components/Feedback';
+// import Feedback from './components/Feedback';
 
 import Draft from './components/Draft'; // для тренировки теории модуля
 
@@ -12,7 +12,7 @@ class App extends Component {
     return (
       <div>
         {/* Home work */}
-        <Feedback />
+        {/* <Feedback /> */}
 
         {/* для тренировки теории по модулю components//Draft/Draft.js */}
         <Draft />
