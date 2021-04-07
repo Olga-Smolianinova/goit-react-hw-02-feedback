@@ -8,7 +8,7 @@ import todosOperations from '../redux/todos/todos-operations';
 // Components
 import Counter from './Counter';
 
-import Dropdown from './Dropdown';
+// import Dropdown from './Dropdown';
 
 import ColorPicker from './ColorPicker';
 
@@ -68,7 +68,7 @@ class Draft extends Component {
         <Counter />
 
         {/* Dropdown Menu */}
-        <Dropdown />
+        {/* <Dropdown /> */}
 
         {/* ColorPicker */}
         <ColorPicker options={colorPickerOptions} />
