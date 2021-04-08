@@ -3,10 +3,6 @@ import React, { Component } from 'react';
 // Components
 import Counter from './Counter';
 
-import Dropdown from './Dropdown';
-
-import ColorPicker from './ColorPicker';
-
 import TodoList from './TodoList/TodoList';
 import TodoForm from './TodoForm/TodoForm';
 import TodoFilter from './TodoFilter/TodoFilter';
@@ -14,21 +10,8 @@ import TodoFilter from './TodoFilter/TodoFilter';
 // import initialTodos from './TodoList/todos.json'; //данные для TodoList
 import './TodoList/TodoList.css'; //стили для TodoList
 
-// для тренировки Form
-// import Form from './Form/Form';
-
 // LOCAL STORAGE И ЖИЗНЕННЫЕ ЦИКЛЫ
 import Modal from './Modal/Modal'; //Modal window
-
-// data for ColorPicker
-const colorPickerOptions = [
-  { label: 'red', color: '#F44336' },
-  { label: 'green', color: '#4CAF50' },
-  { label: 'blue', color: '#2196F3' },
-  { label: 'grey', color: '#607D8B' },
-  { label: 'pink', color: '#E91E63' },
-  { label: 'indigo', color: '#3F51B5' },
-];
 
 class Draft extends Component {
   // state for TodoList
@@ -169,12 +152,6 @@ class Draft extends Component {
         {/* Counter */}
         <Counter />
 
-        {/* Dropdown Menu */}
-        <Dropdown />
-
-        {/* ColorPicker */}
-        <ColorPicker options={colorPickerOptions} />
-
         {/* Form for TodoList */}
         <TodoForm />
 
@@ -196,9 +173,6 @@ class Draft extends Component {
         // onDeleteTodo={this.deleteTodo}
         // onToggleCompleted={this.toggleCompleted}
         />
-
-        {/* Form. чтобы при отравке (submit) формы получить доступ к state из Form.js добавляем prop onSubmit методом для этого */}
-        {/* <Form onSubmit={this.formSubmitHandler} /> */}
 
         {/* LOCAL STORAGE И ЖИЗНЕННЫЕ ЦИКЛЫ */}
         {/* Modal. Рендер по условию */}
