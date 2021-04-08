@@ -2,7 +2,11 @@ import React from 'react';
 
 import { connect } from 'react-redux'; //подключение к Redux
 
-import todosOperations from '../../redux/todos/todos-operations';
+// Data
+// import todosOperations from '../../redux/todos/todos-operations';
+// import todosSelectors from '../../redux/todos/todos-selectors';
+
+import { todosOperations, todosSelectors } from '../../redux/todos'; //рефакторинг для сокращения прописывания пути, используя export {default} в index.js
 
 import classNames from 'classnames'; //подключаем npm i classnames для удобства и  возможности объединения несколькиз class в одном свойстве
 
@@ -59,32 +63,9 @@ const TodoList = ({ todos, onDeleteTodo, onToggleCompleted }) => {
   );
 };
 
-// метод для отображения по фильтру.   Отфильтровываем те todos, которые includes то, что мы записали в input Фильтр по имени и в TodoList рендерим не все <TodoList
-//   todos={todos}, а только отфильтрованые, т.е.  todos={filteredTodos}
-// />
-const getFilteredTodos = (allTodos, filter) => {
-  // для чистоты кода выведем this.state.filter.toLowerCase() в отдельную переменную
-  const normalizedFilter = filter.toLowerCase();
-
-  return allTodos.filter(todo =>
-    todo.text.toLowerCase().includes(normalizedFilter),
-  );
-};
-
-// const mapStateToProps = state => {
-//   // для отображения по фильтру
-//   const { filter, items } = state.todos;
-
-//   const filteredTodos = getFilteredTodos(items, filter);
-
-//   return {
-//     todos: filteredTodos,
-//   };
-// };
-
-// или такой вариант рефакторинга кода
-const mapStateToProps = ({ todos: { items, filter } }) => ({
-  todos: getFilteredTodos(items, filter),
+//Рефакторинг кода с использованием selectors
+const mapStateToProps = state => ({
+  todos: todosSelectors.getFilteredTodos(state),
 });
 
 const mapDispatchToProps = dispatch => ({

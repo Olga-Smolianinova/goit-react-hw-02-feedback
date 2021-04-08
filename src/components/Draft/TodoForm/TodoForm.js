@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 
-import todosOperations from '../../redux/todos/todos-operations';
+// Data
+// import todosOperations from '../../redux/todos/todos-operations';
 
+import { todosOperations } from '../../redux/todos'; //рефакторинг для сокращения прописывания пути, используя export {default} в index.js
+
+// Styles
 import './TodoForm.css';
 
 class TodoForm extends Component {

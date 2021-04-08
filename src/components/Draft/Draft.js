@@ -3,7 +3,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 // Data
-import todosOperations from '../redux/todos/todos-operations';
+// import todosOperations from '../redux/todos/todos-operations';
+// import todosSelectors from '../redux/todos/todos-selectors';
+
+import { todosOperations, todosSelectors } from '../redux/todos'; //рефакторинг для сокращения прописывания пути, используя export {default} в index.js
 
 // Components
 import Counter from './Counter';
@@ -84,7 +87,9 @@ class Draft extends Component {
 }
 
 const mapStateToProps = state => ({
-  isLoadingTodos: state.todos.loading,
+  // isLoadingTodos: state.todos.loading,//без использования selectors
+
+  isLoadingTodos: todosSelectors.getLoading(state), //с использованием selectors
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -17,7 +17,9 @@ import {
 // Reducers
 import counterReducer from './counter/counter-reducer'; //reducer для Counter
 
-import todosReducer from './todos/todos-reducer'; // reducer для todos в TodoList
+// import todosReducer from './todos/todos-reducer'; // reducer для todos в TodoList
+
+import { todosReducer } from './todos'; // reducer для todos в TodoList //рефакторинг для сокращения прописывания пути, используя export {default} в index.js
 
 // для того, чтобы работать с http-запросами нужно прописать дополнительную настройку. Он уже есть под капотом функции configureStore в toolkit и находится внутри  default Middlewares. Это thunk -  default способ для работы  с  http-запросами в Redux. http-запросам нужно делать в action,  в reducer - нельзя
 

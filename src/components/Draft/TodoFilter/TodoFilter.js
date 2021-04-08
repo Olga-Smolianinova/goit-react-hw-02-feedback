@@ -2,8 +2,13 @@ import React from 'react';
 
 import { connect } from 'react-redux'; //подключение к Redux
 
-import todosActions from '../../redux/todos/todos-actions';
+// Data
+// import todosActions from '../../redux/todos/todos-actions';
+// import todosSelectors from '../../redux/todos/todos-selectors';
 
+import { todosActions, todosSelectors } from '../../redux/todos'; //рефакторинг для сокращения прописывания пути, используя export {default} в index.js
+
+// Styles
 import './TodoFilter.css';
 
 const TodoFilter = ({ value, onChange }) => (
@@ -14,7 +19,8 @@ const TodoFilter = ({ value, onChange }) => (
 );
 
 const mapStateToProps = state => ({
-  value: state.todos.filter,
+  // value: state.todos.filter, //без использования selectors
+  value: todosSelectors.getFilter(state), //с использованием selectors
 });
 
 const mapDispatchToProps = dispatch => ({
