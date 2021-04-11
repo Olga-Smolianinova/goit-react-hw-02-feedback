@@ -6,10 +6,9 @@ import { connect } from 'react-redux';
 // import todosOperations from '../redux/todos/todos-operations';
 // import todosSelectors from '../redux/todos/todos-selectors';
 
-import { todosOperations, todosSelectors } from '../redux/todos'; //рефакторинг для сокращения прописывания пути, используя export {default} в index.js
+import { todosOperations, todosSelectors } from '../../redux/todos'; //рефакторинг для сокращения прописывания пути, используя export {default} в index.js
 
 // Components
-import Counter from './Counter';
 
 import TodoList from './TodoList/TodoList';
 import Statictics from './Statistics/Statistics';
@@ -50,28 +49,20 @@ class Draft extends Component {
   render() {
     return (
       <div>
-        {/* Counter */}
-        <Counter />
-
-        {/* Form for TodoList */}
+        Form for TodoList
         <TodoForm />
-
         {/* для фильтрации */}
         <TodoFilter />
-
         {/* Statictics */}
         <Statictics />
-
         {/* добавляем отображение Loading при открытии страницы*/}
         {this.props.isLoadingTodos && <h2>Loading...</h2>}
         {/* TodoList подключится к Redux, и возьмет из хранилища то, что ему нужно  */}
         <TodoList />
-
         {/* Modal. Рендер по условию */}
         <button type="button" onClick={this.toggleModal}>
           Open modal window
         </button>
-
         {this.state.showModal && (
           //в props прокидываем toggleModal для возможности закрыть модалку по нажатию на "Escape"
           <Modal onClose={this.toggleModal}>

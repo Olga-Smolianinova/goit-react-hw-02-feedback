@@ -12,7 +12,7 @@ import classNames from 'classnames'; //подключаем npm i classnames д�
 
 import IconButton from '../IconButton';
 
-import { ReactComponent as DeleteIcon } from '../../../icons/delete.svg'; //import иконки для удаления
+import { ReactComponent as DeleteIcon } from '../../icons/delete.svg'; //import иконки для удаления
 
 import './TodoList.css'; //import компонента кнопки
 

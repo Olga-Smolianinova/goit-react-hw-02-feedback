@@ -15,7 +15,6 @@ import {
 } from 'redux-persist'; //позволяет записывать какие-либо данные куда-либо, например в local storage. persistStore - для всего store; persistReducer - для одного редьюсера. Все остальное - для проработки ошибок в консоли
 
 // Reducers
-import counterReducer from './counter/counter-reducer'; //reducer для Counter
 
 // import todosReducer from './todos/todos-reducer'; // reducer для todos в TodoList
 
@@ -42,8 +41,6 @@ const store = configureStore({
 
   // reducer: {}, под капотом уже использует combineReducers  from 'redux' для композиции редьюсеров, то есть совмещать много в один.
   reducer: {
-    counter: counterReducer,
-
     todos: todosReducer,
   }, //Значение - вызов rootReducer c  persistedReducer, для того чтобы записывать какие-либо данные куда-либо, например в local storage
   middleware, //возвращает список default Middlewares (прослоек), к которому добавляем еще logger =  прослойка (middleware) при console.log() отображает action (до и после)

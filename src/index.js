@@ -8,7 +8,7 @@ import { Provider } from 'react-redux'; //Для подключение  гло�
 
 // Components
 //  Для передачи Provider в props store, с ссылкой на наше хранилище  сначала импортируем файл
-import store from './components/redux/store';
+import store from './redux/store';
 
 import App from './App';
 
