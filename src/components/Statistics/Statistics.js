@@ -3,8 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 // Data
-// import todosSelectors from '../../redux/todos/todos-selectors';
-
 import { todosSelectors } from '../../redux/todos'; //рефакторинг для сокращения прописывания пути, используя export {default} в index.js
 
 const Statictics = ({ total, completed }) => {

@@ -3,9 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux'; //подключение к Redux
 
 // Data
-// import todosActions from '../../redux/todos/todos-actions';
-// import todosSelectors from '../../redux/todos/todos-selectors';
-
 import { todosActions, todosSelectors } from '../../redux/todos'; //рефакторинг для сокращения прописывания пути, используя export {default} в index.js
 
 // Styles

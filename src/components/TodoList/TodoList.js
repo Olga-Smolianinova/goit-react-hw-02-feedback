@@ -3,9 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux'; //подключение к Redux
 
 // Data
-// import todosOperations from '../../redux/todos/todos-operations';
-// import todosSelectors from '../../redux/todos/todos-selectors';
-
 import { todosOperations, todosSelectors } from '../../redux/todos'; //рефакторинг для сокращения прописывания пути, используя export {default} в index.js
 
 import classNames from 'classnames'; //подключаем npm i classnames для удобства и  возможности объединения несколькиз class в одном свойстве
@@ -14,12 +11,12 @@ import IconButton from '../IconButton';
 
 import { ReactComponent as DeleteIcon } from '../../icons/delete.svg'; //import иконки для удаления
 
-import './TodoList.css'; //import компонента кнопки
+import './TodoList.scss'; //import компонента кнопки
 
 const TodoList = ({ todos, onDeleteTodo, onToggleCompleted }) => {
   return (
     <ul className="TodoList">
-      {todos.map(({ id, text, completed }) => (
+      {todos.map(({ id, description, completed }) => (
         <li
           key={id}
           // в className подключаем несколько class с помощью import classNames from 'classnames'
@@ -35,7 +32,7 @@ const TodoList = ({ todos, onDeleteTodo, onToggleCompleted }) => {
             onChange={() => onToggleCompleted({ id, completed: !completed })}
           />
 
-          <p className="TodoList__text">{text}</p>
+          <p className="TodoList__text">{description}</p>
 
           {/* Вставка IconButton. // когда в кнопке отстутствует текст (в случае когда там иконка) необходимо передавать атрибут доступности aria-label и в самом компоненте IconButton распыляем props {...allProps} */}
           <IconButton

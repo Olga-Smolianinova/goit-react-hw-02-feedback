@@ -1,102 +1,47 @@
 import React, { Component } from 'react';
-
+import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-// import Draft from './components/Draft'; // для тренировки теории модуля
+//Data
+import { authOperations } from './redux/authorization';
 
-// Data
-// import todosOperations from '../redux/todos/todos-operations';
-// import todosSelectors from '../redux/todos/todos-selectors';
-
-import { todosOperations, todosSelectors } from './redux/todos'; //рефакторинг для сокращения прописывания пути, используя export {default} в index.js
+// Pages
+import HomePage from './pages/HomePage';
+import RegisterPage from './pages/RegisterPage';
+import LoginPage from './pages/LoginPage';
+import TodosPage from './pages/TodosPage';
 
 // Components
-
-import TodoList from './components/TodoList';
-import Statictics from './components/Statistics';
-import TodoForm from './components/TodoForm';
-import TodoFilter from './components/TodoFilter';
-
-import Modal from './components/Modal'; //Modal window
-// import Modal from './components'
-
-import './components/TodoList/TodoList.css'; //стили для TodoList
-
-// Styles
+import Container from './components/Container';
+import AppBar from './components/AppBar';
 
 class App extends Component {
-  // state for TodoList
-  state = {
-    // для Модального окна
-    showModal: false,
-  };
-
-  // ЖИЗНЕННЫЕ ЦИКЛЫ
+  //ЖИЗНЕННЫЕ ЦИКЛЫ
   componentDidMount() {
-    // при Mount страницы, чтобы из локального бекенда db.json - отрисовывались данные (todos)
-    this.props.fetchTodos();
+    //вызов onGetCurrentUser, в operations прописана логика  для того, чтобы сохранить текущего пользователя, а не выполнять логизацию каждый раз после обновления страницы; 1) сохраняем token в local storage и получаем к нему доступ через getState
+    this.props.onGetCurrentUser();
   }
-
-  // МЕТОДЫ
-  // чтобы при отравке (submit) формы получить доступ к state из Form.js. Это можно сделать через props. В data прокидываются ключи name,tag из state
-  formSubmitHandler = data => {
-    console.log(data);
-  };
-
-  // работа Модального окна. Открытие-закрытие в зависимости от предыдущего значения
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
-  };
 
   render() {
     return (
-      <div>
-        {/* для тренировки теории по модулю components//Draft/Draft.js */}
-        {/* <Draft /> */}
+      // <>
+      <Container>
+        <AppBar />
 
-        {/* Form for TodoList */}
-        <TodoForm />
-
-        {/* для фильтрации */}
-        <TodoFilter />
-
-        {/* Statictics */}
-        <Statictics />
-
-        {/* добавляем отображение Loading при открытии страницы*/}
-        {this.props.isLoadingTodos && <h2>Loading...</h2>}
-        {/* TodoList подключится к Redux, и возьмет из хранилища то, что ему нужно  */}
-        <TodoList />
-
-        {/* Modal. Рендер по условию */}
-        <button type="button" onClick={this.toggleModal}>
-          Open modal window
-        </button>
-
-        {this.state.showModal && (
-          //в props прокидываем toggleModal для возможности закрыть модалку по нажатию на "Escape"
-          <Modal onClose={this.toggleModal}>
-            <h1>Modal</h1>
-            <button type="button" onClick={this.toggleModal}>
-              Close Modal window
-            </button>
-          </Modal>
-        )}
-      </div>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route path="/register" component={RegisterPage} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/todos" component={TodosPage} />
+        </Switch>
+      </Container>
+      // </>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  // isLoadingTodos: state.todos.loading,//без использования selectors
+const mapDispatchToProps = {
+  onGetCurrentUser: authOperations.getCurrentUser,
+};
 
-  isLoadingTodos: todosSelectors.getLoading(state), //с использованием selectors
-});
-
-const mapDispatchToProps = dispatch => ({
-  fetchTodos: () => dispatch(todosOperations.fetchTodos()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(null, mapDispatchToProps)(App);

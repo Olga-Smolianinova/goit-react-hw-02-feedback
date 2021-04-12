@@ -2,9 +2,11 @@ import React from 'react';
 
 import ReactDOM from 'react-dom';
 
+import { BrowserRouter } from 'react-router-dom';
+
 import { Provider } from 'react-redux'; //Для подключение  глобального store  к Redux. Достаем  Provider  (пакет из react-redux) - компонент, который оборачивает все наше приложение, он ставится поверх App, и он через контекст (контекст - это глобальная переменная) может прокидывать в глубину и на любую вложенность дополнительный функционал.
 
-// import { PersistGate } from 'redux-persist/integration/react'; // используется для реализации redux-persist
+import { PersistGate } from 'redux-persist/integration/react'; // используется для реализации redux-persist
 
 // Components
 //  Для передачи Provider в props store, с ссылкой на наше хранилище  сначала импортируем файл
@@ -22,11 +24,13 @@ ReactDOM.render(
     компонент, который оборачивает все наше приложение, он ставится поверх App,
     и он через контекст (контекст - это глобальная переменная) может прокидывать
     в глубину и на любую вложенность дополнительный функционал. Provider в props передаем store (файл которого перед тем import) , с ссылкой на наше хранилище  */}
-    <Provider store={store}>
+    <Provider store={store.store}>
       {/*PersistGate используется для реализации redux-persist. В props передаем 1)loading, в который можно указать какой-либо preloader; 2) persistor  - ссылка на сам persistor, который заимпортирован из файла store.js*/}
-      {/* <PersistGate loading={null} persistor={store.persistor}> */}
-      <App />
-      {/* </PersistGate> */}
+      <PersistGate loading={null} persistor={store.persistor}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),
