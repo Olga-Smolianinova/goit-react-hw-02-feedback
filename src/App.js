@@ -1,19 +1,30 @@
-import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import React, { Component, Suspense, lazy } from 'react';
+import { Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 //Data
 import { authOperations } from './redux/authorization';
 
 // Pages
-import HomePage from './pages/HomePage';
-import RegisterPage from './pages/RegisterPage';
-import LoginPage from './pages/LoginPage';
-import TodosPage from './pages/TodosPage';
+// import HomePage from './pages/HomePage';
+// import RegisterPage from './pages/RegisterPage';
+// import LoginPage from './pages/LoginPage';
+// import TodosPage from './pages/TodosPage';
 
 // Components
 import Container from './components/Container';
 import AppBar from './components/AppBar';
+
+import PrivateRoute from './components/PrivateRoute'; //чтобы не отображать содержимое страницы незалогиненному пользователю
+import PublicRoute from './components/PublicRoute'; //когда пользователь залогинен, ему не должны отображаться на определенные страницы, например регистрации и логинизации
+
+const HomePage = lazy(() => import('./pages/HomePage'));
+
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+
+const TodosPage = lazy(() => import('./pages/TodosPage'));
 
 class App extends Component {
   //ЖИЗНЕННЫЕ ЦИКЛЫ
@@ -28,12 +39,33 @@ class App extends Component {
       <Container>
         <AppBar />
 
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route path="/register" component={RegisterPage} />
-          <Route path="/login" component={LoginPage} />
-          <Route path="/todos" component={TodosPage} />
-        </Switch>
+        <Suspense fallback={<p>Загрузка...</p>}>
+          <Switch>
+            <PublicRoute exact path="/" component={HomePage} />
+
+            {/* когда пользователь залогинен, ему не должны отображаться на определенные страницы, например регистрации и логинизации;  restricted - ограниченый маршрут */}
+            <PublicRoute
+              path="/register"
+              restricted
+              redirectTo="/todos"
+              component={RegisterPage}
+            />
+
+            <PublicRoute
+              path="/login"
+              restricted
+              redirectTo="/todos"
+              component={LoginPage}
+            />
+
+            {/* чтобы не отображать содержимое страницы незалогиненному пользователю */}
+            <PrivateRoute
+              path="/todos"
+              redirectTo="/login"
+              component={TodosPage}
+            />
+          </Switch>
+        </Suspense>
       </Container>
       // </>
     );

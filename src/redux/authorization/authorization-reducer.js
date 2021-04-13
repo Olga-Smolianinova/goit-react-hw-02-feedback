@@ -43,8 +43,25 @@ const error = createReducer(null, {
   [authActions.getCurrentUserError]: setError,
 });
 
+//Наличие token  в local storage не является подтверждением того, что пользователь залогинен. Это будет известно только после ответа с бекенда (isAuthenticated=true).  Чтобы при перезагрузке стриницы текущий пользователь сохранялся, сначала получаем ответ с бекенда, если пользователь залогинен
+const isAuthenticated = createReducer(false, {
+  [authActions.registerSuccess]: () => true, //пользователь успешно зарегестрирован
+
+  [authActions.loginSuccess]: () => true, //успешная логинизация
+
+  [authActions.getCurrentUserSuccess]: () => true, //успешная авторизация
+
+  // при ошибках isAuthenticated=false
+  [authActions.registerError]: () => false,
+  [authActions.loginError]: () => false,
+  [authActions.getCurrentUserError]: () => false,
+
+  [authActions.logoutSuccess]: () => false, //когда успешно разлогинен
+});
+
 export default combineReducers({
   user,
+  isAuthenticated,
   token,
   error,
 });
