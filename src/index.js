@@ -8,10 +8,13 @@ import { Provider } from 'react-redux'; //Для подключение  гло�
 
 import { PersistGate } from 'redux-persist/integration/react'; // используется для реализации redux-persist
 
-// Components
+// Data
+import AuthProvider from './context/AuthProvider'; //Контекст для page Context
+
 //  Для передачи Provider в props store, с ссылкой на наше хранилище  сначала импортируем файл
 import store from './redux/store';
 
+// Components
 import App from './App';
 
 import './index.css';
@@ -28,7 +31,9 @@ ReactDOM.render(
       {/*PersistGate используется для реализации redux-persist. В props передаем 1)loading, в который можно указать какой-либо preloader; 2) persistor  - ссылка на сам persistor, который заимпортирован из файла store.js*/}
       <PersistGate loading={null} persistor={store.persistor}>
         <BrowserRouter>
-          <App />
+          <AuthProvider>
+            <App />
+          </AuthProvider>
         </BrowserRouter>
       </PersistGate>
     </Provider>

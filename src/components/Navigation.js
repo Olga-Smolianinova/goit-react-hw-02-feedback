@@ -21,7 +21,7 @@ const styles = {
 const Navigation = ({ isAuthenticated }) => (
   <nav>
     <NavLink to="/" exact style={styles.link} activeStyle={styles.activeLink}>
-      Главная
+      Home
     </NavLink>
 
     {/* рендер по условию, чтобы страница Заметки не отображалась вообще, если пользователь незалогинен */}
@@ -32,9 +32,38 @@ const Navigation = ({ isAuthenticated }) => (
         style={styles.link}
         activeStyle={styles.activeLink}
       >
-        Заметки
+        Notes
       </NavLink>
     )}
+
+    {/*для тренировки React Hooks */}
+    <NavLink to="/counter" style={styles.link} activeStyle={styles.activeLink}>
+      Counter
+    </NavLink>
+
+    <NavLink to="/form" style={styles.link} activeStyle={styles.activeLink}>
+      Form
+    </NavLink>
+
+    <NavLink
+      to="/colorpicker"
+      style={styles.link}
+      activeStyle={styles.activeLink}
+    >
+      Color Picker
+    </NavLink>
+
+    <NavLink to="/clock" style={styles.link} activeStyle={styles.activeLink}>
+      Clock
+    </NavLink>
+
+    <NavLink to="/news" style={styles.link} activeStyle={styles.activeLink}>
+      News
+    </NavLink>
+
+    <NavLink to="/context" style={styles.link} activeStyle={styles.activeLink}>
+      Context
+    </NavLink>
   </nav>
 );
 

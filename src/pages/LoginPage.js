@@ -43,7 +43,7 @@ class LoginPage extends Component {
         <form
           onSubmit={this.handleSubmit}
           style={styles.form}
-          autoComplete="off"
+          // autoComplete="off"
         >
           <label style={styles.label}>
             Почта
