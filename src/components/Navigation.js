@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux'; //connect заменяем на useSelector
 import { NavLink } from 'react-router-dom';
 
 // Data
@@ -18,57 +18,121 @@ const styles = {
   },
 };
 
-const Navigation = ({ isAuthenticated }) => (
-  <nav>
-    <NavLink to="/" exact style={styles.link} activeStyle={styles.activeLink}>
-      Home
-    </NavLink>
+//c React Hooks
+export default function Navigation() {
+  // вызов useSelector - в него передаем функцию (а именно ссылку на свой селектор) и этот селектор получает доступ к state. Если селектором много, для каждого прописіваем отдельный useSelector
+  const isLoggedIn = useSelector(authSelectors.getIsAuthenticated);
 
-    {/* рендер по условию, чтобы страница Заметки не отображалась вообще, если пользователь незалогинен */}
-    {isAuthenticated && (
+  return (
+    <nav>
+      <NavLink to="/" exact style={styles.link} activeStyle={styles.activeLink}>
+        Home
+      </NavLink>
+
+      {/* рендер по условию, чтобы страница Заметки не отображалась вообще, если пользователь незалогинен */}
+      {isLoggedIn && (
+        <NavLink
+          to="/todos"
+          exact
+          style={styles.link}
+          activeStyle={styles.activeLink}
+        >
+          Notes
+        </NavLink>
+      )}
+
+      {/*для тренировки React Hooks */}
       <NavLink
-        to="/todos"
-        exact
+        to="/counter"
         style={styles.link}
         activeStyle={styles.activeLink}
       >
-        Notes
+        Counter
       </NavLink>
-    )}
 
-    {/*для тренировки React Hooks */}
-    <NavLink to="/counter" style={styles.link} activeStyle={styles.activeLink}>
-      Counter
-    </NavLink>
+      <NavLink to="/form" style={styles.link} activeStyle={styles.activeLink}>
+        Form
+      </NavLink>
 
-    <NavLink to="/form" style={styles.link} activeStyle={styles.activeLink}>
-      Form
-    </NavLink>
+      <NavLink
+        to="/colorpicker"
+        style={styles.link}
+        activeStyle={styles.activeLink}
+      >
+        Color Picker
+      </NavLink>
 
-    <NavLink
-      to="/colorpicker"
-      style={styles.link}
-      activeStyle={styles.activeLink}
-    >
-      Color Picker
-    </NavLink>
+      <NavLink to="/clock" style={styles.link} activeStyle={styles.activeLink}>
+        Clock
+      </NavLink>
 
-    <NavLink to="/clock" style={styles.link} activeStyle={styles.activeLink}>
-      Clock
-    </NavLink>
+      <NavLink to="/news" style={styles.link} activeStyle={styles.activeLink}>
+        News
+      </NavLink>
 
-    <NavLink to="/news" style={styles.link} activeStyle={styles.activeLink}>
-      News
-    </NavLink>
+      <NavLink
+        to="/context"
+        style={styles.link}
+        activeStyle={styles.activeLink}
+      >
+        Context
+      </NavLink>
+    </nav>
+  );
+}
 
-    <NavLink to="/context" style={styles.link} activeStyle={styles.activeLink}>
-      Context
-    </NavLink>
-  </nav>
-);
+// без React Hooks
+// const Navigation = ({ isAuthenticated }) => (
+//   <nav>
+//     <NavLink to="/" exact style={styles.link} activeStyle={styles.activeLink}>
+//       Home
+//     </NavLink>
 
-const mapStateToProps = state => ({
-  isAuthenticated: authSelectors.getIsAuthenticated(state),
-});
+//     {/* рендер по условию, чтобы страница Заметки не отображалась вообще, если пользователь незалогинен */}
+//     {isAuthenticated && (
+//       <NavLink
+//         to="/todos"
+//         exact
+//         style={styles.link}
+//         activeStyle={styles.activeLink}
+//       >
+//         Notes
+//       </NavLink>
+//     )}
 
-export default connect(mapStateToProps)(Navigation);
+//     {/*для тренировки React Hooks */}
+//     <NavLink to="/counter" style={styles.link} activeStyle={styles.activeLink}>
+//       Counter
+//     </NavLink>
+
+//     <NavLink to="/form" style={styles.link} activeStyle={styles.activeLink}>
+//       Form
+//     </NavLink>
+
+//     <NavLink
+//       to="/colorpicker"
+//       style={styles.link}
+//       activeStyle={styles.activeLink}
+//     >
+//       Color Picker
+//     </NavLink>
+
+//     <NavLink to="/clock" style={styles.link} activeStyle={styles.activeLink}>
+//       Clock
+//     </NavLink>
+
+//     <NavLink to="/news" style={styles.link} activeStyle={styles.activeLink}>
+//       News
+//     </NavLink>
+
+//     <NavLink to="/context" style={styles.link} activeStyle={styles.activeLink}>
+//       Context
+//     </NavLink>
+//   </nav>
+// );
+
+// const mapStateToProps = state => ({
+//   isAuthenticated: authSelectors.getIsAuthenticated(state),
+// });
+
+// export default connect(mapStateToProps)(Navigation);

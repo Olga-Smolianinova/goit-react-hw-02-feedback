@@ -40,5 +40,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root'),
 );
-
-// необходимо обернуть все приложение в PersistGate

@@ -1,11 +1,18 @@
 import React from 'react';
 
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // Data
 import { todosSelectors } from '../../redux/todos'; //рефакторинг для сокращения прописывания пути, используя export {default} в index.js
 
-const Statictics = ({ total, completed }) => {
+//c React Hooks
+export default function Statictics() {
+  // useSelector 1
+  const total = useSelector(todosSelectors.getTotalTodoCount);
+
+  // useSelector 2
+  const completed = useSelector(todosSelectors.getCompletedTodosCount);
+
   return (
     <div className="TodoList">
       <h2>TodoList</h2>
@@ -13,19 +20,30 @@ const Statictics = ({ total, completed }) => {
       <p>Количество выполненных: {completed}</p>
     </div>
   );
-};
+}
 
-const mapStateToProps = state => ({
-  // без использования selectors
-  // total: state.todos.items.length,
-  // completed: state.todos.items.reduce(
-  //   (acc, todo) => (todo.completed ? acc + 1 : acc),
-  //   0,
-  // ),
+// без React Hooks
+// const Statictics = ({ total, completed }) => {
+//   return (
+//     <div className="TodoList">
+//       <h2>TodoList</h2>
+//       <p>Total todos: {total}</p>
+//       <p>Количество выполненных: {completed}</p>
+//     </div>
+//   );
+// };
 
-  //с использованием selectors
-  total: todosSelectors.getTotalTodoCount(state),
-  completed: todosSelectors.getCompletedTodosCount(state),
-});
+// const mapStateToProps = state => ({
+//   // без использования selectors
+//   // total: state.todos.items.length,
+//   // completed: state.todos.items.reduce(
+//   //   (acc, todo) => (todo.completed ? acc + 1 : acc),
+//   //   0,
+//   // ),
 
-export default connect(mapStateToProps)(Statictics);
+//   //с использованием selectors
+//   total: todosSelectors.getTotalTodoCount(state),
+//   completed: todosSelectors.getCompletedTodosCount(state),
+// });
+
+// export default connect(mapStateToProps)(Statictics);

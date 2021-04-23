@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { useState, useCallback } from 'react';
 
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 // Data
 import { todosOperations } from '../../redux/todos'; //рефакторинг для сокращения прописывания пути, используя export {default} в index.js
@@ -8,51 +8,95 @@ import { todosOperations } from '../../redux/todos'; //рефакторинг д
 // Styles
 import './TodoForm.css';
 
-class TodoForm extends Component {
-  state = {
-    message: '',
-  };
+//c React Hooks
+export default function TodoForm() {
+  // useDispatch
+  const dispatch = useDispatch();
 
-  handleChange = event => {
-    this.setState({ message: event.currentTarget.value });
-  };
+  // useState и функции для его обработки
+  const [message, setMessage] = useState('');
 
-  handleSubmit = event => {
-    event.preventDefault();
-    // console.log(this.state);
+  const handleChange = useCallback(event => {
+    setMessage(event.currentTarget.value);
+  }, []);
 
-    // проверка на пустую строку. Код выполнится в случае сли пользователь не отправляет пустую строку
-    if (this.state.message !== '') {
-      // вызов addTodo из Draft.js <Form onSubmit={this.formSubmitHandler};
-      this.props.onSubmit(this.state.message);
+  const handleSubmit = useCallback(
+    event => {
+      event.preventDefault();
 
-      // reset для очищения textarea
-      this.setState({ message: '' });
+      // проверка на пустую строку. Код выполнится в случае сли пользователь не отправляет пустую строку
+      if (message === '') {
+        return alert('Нужно ввести текст заметки!');
+      }
 
-      return;
-    }
-    alert('Нужно ввести текст заметки!');
-  };
+      dispatch(todosOperations.addTodo(message)); // useDispatch
 
-  render() {
-    return (
-      <form className="TodoEditor" onSubmit={this.handleSubmit}>
-        <textarea
-          value={this.state.message}
-          onChange={this.handleChange}
-          className="TodoEditor__textarea"
-        ></textarea>
+      setMessage(''); // reset для очищения textarea
+    },
+    [dispatch, message],
+  );
 
-        <button type="submit" className="TodoEditor__button">
-          Add
-        </button>
-      </form>
-    );
-  }
+  return (
+    <form className="TodoEditor" onSubmit={handleSubmit}>
+      <textarea
+        value={message}
+        onChange={handleChange}
+        className="TodoEditor__textarea"
+      ></textarea>
+
+      <button type="submit" className="TodoEditor__button">
+        Add
+      </button>
+    </form>
+  );
 }
 
-const mapDispatchToProps = dispatch => ({
-  onSubmit: text => dispatch(todosOperations.addTodo(text)),
-});
+// без React Hooks
+// class TodoForm extends Component {
+//   state = {
+//     message: '',
+//   };
 
-export default connect(null, mapDispatchToProps)(TodoForm);
+//   handleChange = event => {
+//     this.setState({ message: event.currentTarget.value });
+//   };
+
+//   handleSubmit = event => {
+//     event.preventDefault();
+//     // console.log(this.state);
+
+//     // проверка на пустую строку. Код выполнится в случае сли пользователь не отправляет пустую строку
+//     if (this.state.message !== '') {
+//       // вызов addTodo из Draft.js <Form onSubmit={this.formSubmitHandler};
+//       this.props.onSubmit(this.state.message);
+
+//       // reset для очищения textarea
+//       this.setState({ message: '' });
+
+//       return;
+//     }
+//     alert('Нужно ввести текст заметки!');
+//   };
+
+//   render() {
+//     return (
+//       <form className="TodoEditor" onSubmit={this.handleSubmit}>
+//         <textarea
+//           value={this.state.message}
+//           onChange={this.handleChange}
+//           className="TodoEditor__textarea"
+//         ></textarea>
+
+//         <button type="submit" className="TodoEditor__button">
+//           Add
+//         </button>
+//       </form>
+//     );
+//   }
+// }
+
+// const mapDispatchToProps = dispatch => ({
+//   onSubmit: text => dispatch(todosOperations.addTodo(text)),
+// });
+
+// export default connect(null, mapDispatchToProps)(TodoForm);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux'; //connect заменяем на useSelector
 import { authSelectors } from '../redux/authorization';
 
 // Components
@@ -16,18 +16,31 @@ const styles = {
   },
 };
 
+//c React Hooks
+export default function AppBar() {
+  const isLoggedIn = useSelector(authSelectors.getIsAuthenticated);
+
+  return (
+    <header style={styles.header}>
+      <Navigation />
+      {/* рендер по условию - prop {isAuthenticated} - залогиненный или незалогиненный пользователь. В зависимости от этого будет рендерить либо <UserMenu - информация о пользователе /> или <AuthNav  */}
+      {isLoggedIn ? <UserMenu /> : <AuthNav />}
+    </header>
+  );
+}
+
 //prop { isAuthenticated } - залогиненный или незалогиненный пользователь
-const AppBar = ({ isAuthenticated }) => (
-  <header style={styles.header}>
-    <Navigation />
-    {/* рендер по условию - prop {isAuthenticated} - залогиненный или незалогиненный пользователь. В зависимости от этого будет рендерить либо <UserMenu - информация о пользователе /> или <AuthNav  */}
-    {isAuthenticated ? <UserMenu /> : <AuthNav />}
-  </header>
-);
+// const AppBar = ({ isAuthenticated }) => (
+//   <header style={styles.header}>
+//     <Navigation />
+//     {/* рендер по условию - prop {isAuthenticated} - залогиненный или незалогиненный пользователь. В зависимости от этого будет рендерить либо <UserMenu - информация о пользователе /> или <AuthNav  */}
+//     {isAuthenticated ? <UserMenu /> : <AuthNav />}
+//   </header>
+// );
 
-const mapStateToProps = state => ({
-  //Проверка состояния логинизации пользователя по token. Когда пользователь незалогинен token=null, когда залогинен и есть token - необходимо, чтобы отрисовывалось UserMenu. Если token есть - то прийдет строка, и при boolen она будет true, если незалогинен - false
-  isAuthenticated: authSelectors.getIsAuthenticated(state),
-});
+// const mapStateToProps = state => ({
+//   //Проверка состояния логинизации пользователя по token. Когда пользователь незалогинен token=null, когда залогинен и есть token - необходимо, чтобы отрисовывалось UserMenu. Если token есть - то прийдет строка, и при boolen она будет true, если незалогинен - false
+//   isAuthenticated: authSelectors.getIsAuthenticated(state),
+// });
 
-export default connect(mapStateToProps)(AppBar);
+// export default connect(mapStateToProps)(AppBar);

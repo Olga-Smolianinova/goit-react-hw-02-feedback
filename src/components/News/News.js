@@ -5,8 +5,9 @@ import axios from 'axios';
 // Data
 import NewsForm from '../NewsForm';
 
-// axios.defaults.headers.common['Authorization'] =
-// ('Bearer 07dcb9f9cd33447ea07750c7b4735236');
+axios.defaults.headers.common['Authorization'] =
+  // 'Bearer 4330ebfabc654a6992c2aa792f3173a3';
+  'Bearer 07dcb9f9cd33447ea07750c7b4735236';
 
 const APIfetchArticles = ({
   searchQuery = '',
@@ -22,30 +23,24 @@ const APIfetchArticles = ({
 
 // c React Hooks
 export default function News() {
-  // state и функции для articles
+  // useState
   const [articles, setArticles] = useState([]);
-
-  // state и функции для query
   const [query, setQuery] = useState('');
-
-  // state и функции для currentPage
   const [currentPage, setCurrentPage] = useState(1);
-
-  // state и функции для isLoading
   const [isLoading, setIsLoading] = useState(false);
-
-  // state и функции для error
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!query) {
+      return;
+    }
+
     const fetchArticles = () => {
       setIsLoading(true); //отрисовка спиннера пока идет запрос
 
-      APIfetchArticles({ searchQuery: query, currentPage })
+      return APIfetchArticles({ searchQuery: query, currentPage })
         .then(responseArticles => {
           setArticles(prevArticles => [...prevArticles, ...responseArticles]); //распыляем то что было, и добавляем то, что вернулось в результате http-запроса
-
-          setCurrentPage(prevCurrentPage => prevCurrentPage + 1); //при отрисовки следующей части результатов увеличиваем currentPage
         })
         .catch(error => setError(error.message))
         .finally(() => setIsLoading(false)); //прекращаем отрисовку спиннера, после удачного http-запроса; //вызваем APIfetchArticles() из шапки файла, в который передаем объект настроек
@@ -53,6 +48,10 @@ export default function News() {
 
     fetchArticles();
   }, [currentPage, query]); //чтобы выполнялся запрос каждый раз после отправки формы
+
+  const updatePage = () => {
+    setCurrentPage(prevCurrentPage => prevCurrentPage + 1); //при отрисовки следующей части результатов увеличиваем currentPage
+  };
 
   // функция для строки поиска
   const onChangeQuery = query => {
@@ -66,7 +65,7 @@ export default function News() {
   const shouldRenderLoadMoreButton = articles.length > 0 && !isLoading;
 
   return (
-    <div>
+    <>
       {error && <h1>Ой ошибка, всё пропало!!!</h1>}
 
       <NewsForm onSubmit={onChangeQuery} />
@@ -82,7 +81,7 @@ export default function News() {
       </ul>
 
       {shouldRenderLoadMoreButton && (
-        <button type="button" onClick={() => null}>
+        <button type="button" onClick={updatePage}>
           Загрузить ещё
         </button>
       )}
@@ -99,7 +98,7 @@ export default function News() {
           </span>
         </p>
       )}
-    </div>
+    </>
   );
 }
 
