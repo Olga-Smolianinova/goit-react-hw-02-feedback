@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
 // Components
 // import Feedback from './components/Feedback';
@@ -7,88 +7,67 @@ import FeedbackOptions from './components/FeedbackOptions';
 import Statistics from './components/Statistics';
 import Notification from './components/Notification';
 
-// Styles
+//  c React Hooks
+export default function App() {
+  // useState
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
-class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
-
-  // методы
-  countFeedback = event => {
+  // function
+  const countFeedback = event => {
     const btnName = event.target.textContent.toLowerCase();
 
-    this.setState(prevState => {
-      // перебираем this.state. Если в переборе ключ и имя кнопки (приведенное к нижнему регистру) совпадает, то значение ключа +1
-      for (const key in prevState) {
-        if (key === btnName) {
-          return { [key]: prevState[key] + 1 };
-        }
-      }
-      // вариант 2 - тоже самое через распыление
-      // ...prevState,
-      // ...{
-      //   [btnName]:
-      //     prevState[btnName] + 1,
-      // },
-    });
+    switch (btnName) {
+      case 'good':
+        setGood(prevGood => prevGood + 1);
+        break;
+
+      case 'neutral':
+        setNeutral(prevNeutral => prevNeutral + 1);
+        break;
+
+      case 'bad':
+        setBad(prevBad => prevBad + 1);
+        break;
+
+      default:
+        console.warn(`Тип поля name - ${btnName} не обрабатывается`);
+    }
   };
 
-  // метод для расчета общего количества отзывов (total). Для использования этого способа в render() прописываем totalFeedback=this.countTotalFeedback()
+  const countTotalFeedback = () => good + neutral + bad;
 
-  // countTotalFeedback = () => {
-  //   const values = Object.values(this.state);
-  //   console.log(values);
-  //   const totalFeedback = values.reduce((acc, value) => acc + value, 0);
-  //   return totalFeedback;
-  // };
+  const countPositiveFeedbackPercentage = () =>
+    Math.round((good * 100) / countTotalFeedback());
 
-  // render
-  render() {
-    // для оптимизации кода деструктуризируем свойства state,чтобы каждый раз не писать this.state в Statistics
-    const { good, neutral, bad } = this.state;
-    // console.log(this.state);
-
-    // для расчета общего количества отзывов (total)
-    const countTotalFeedback = good + neutral + bad;
-
-    // для расчета % положительных отзывов
-    const countPositiveFeedbackPercentage = Math.round(
-      (good * 100) / countTotalFeedback,
-    );
-
-    return (
-      <div className="Feedback">
-        {/*1. title выносим в отдельный component 
+  return (
+    <div className="Feedback">
+      {/*1. title выносим в отдельный component 
         /* 2.  внутрь Section рендерим и вставляем часть кода из ./FeedbackOptions.js */}
-        <Section title="Please leave feedback">
-          <FeedbackOptions
-            options={this.state}
-            onLeaveFeedback={this.countFeedback}
-          />
-        </Section>
+      <Section title="Please leave feedback">
+        <FeedbackOptions
+          options={{ good, neutral, bad }}
+          onLeaveFeedback={countFeedback}
+        />
+      </Section>
 
-        {/*3. title выносим в отдельный component
+      {/*3. title выносим в отдельный component
         4. внутрь Section рендерим и вставляем часть кода из ./Statistics.js */}
-        <Section title="Statistics">
-          {/* рендер по условию: если есть хотя бы 1 отзыв выведи всю статистику, в обратном случае - надпись No feedback given' */}
-          {countTotalFeedback !== 0 ? (
-            <Statistics
-              good={good}
-              neutral={neutral}
-              bad={bad}
-              total={countTotalFeedback}
-              positivePercentage={countPositiveFeedbackPercentage}
-            />
-          ) : (
-            <Notification message="No feedback given" />
-          )}
-        </Section>
-      </div>
-    );
-  }
+      <Section title="Statistics">
+        {/* рендер по условию: если есть хотя бы 1 отзыв выведи всю статистику, в обратном случае - надпись No feedback given' */}
+        {countTotalFeedback() !== 0 ? (
+          <Statistics
+            good={good}
+            neutral={neutral}
+            bad={bad}
+            total={countTotalFeedback()}
+            positivePercentage={countPositiveFeedbackPercentage()}
+          />
+        ) : (
+          <Notification message="No feedback given" />
+        )}
+      </Section>
+    </div>
+  );
 }
-
-export default App;
